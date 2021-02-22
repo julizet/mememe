@@ -476,7 +476,7 @@ input[type="range"]:focus::-ms-fill-upper {
     display: inline-block;
     width: 50%;
     overflow: auto;
-    float: left;
+    // float: left;
 
     &:nth-child(odd) {
       padding-right: 0.5em;
