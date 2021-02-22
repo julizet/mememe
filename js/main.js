@@ -1,257 +1,148 @@
-// CAN\NVAS.js plugin
-// ninivert, december 2016
-(function (window, document) {
-  /**
-   * CAN\VAS Plugin - Adding line breaks to canvas
-   * @arg {string} [str=Hello World] - text to be drawn
-   * @arg {number} [x=0]             - top left x coordinate of the text
-   * @arg {number} [y=textSize]      - top left y coordinate of the text
-   * @arg {number} [w=canvasWidth]   - maximum width of drawn text
-   * @arg {number} [lh=1]            - line height
-   * @arg {number} [method=fill]     - text drawing method, if 'none', text will not be rendered
-   */
+$(document).ready(function () {
+  var quoteSource = [
+    {
+      quote:
+        "Start by doing what's necessary; then do what's possible; and suddenly you are doing the impossible.",
+      name: "Francis of Assisi",
+    },
+    {
+      quote: "Believe you can and you're halfway there.",
+      name: "Theodore Roosevelt",
+    },
+    {
+      quote: "It does not matter how slowly you go as long as you do not stop.",
+      name: "Confucius",
+    },
+    {
+      quote:
+        "Our greatest weakness lies in giving up. The most certain way to succeed is always to try just one more time.",
+      name: "Thomas A. Edison",
+    },
+    {
+      quote:
+        "The will to win, the desire to succeed, the urge to reach your full potential... these are the keys that will unlock the door to personal excellence.",
+      name: "Confucius",
+    },
+    {
+      quote: "Don't watch the clock; do what it does. Keep going.",
+      name: "Sam Levenson",
+    },
+    {
+      quote:
+        "A creative man is motivated by the desire to achieve, not by the desire to beat others.",
+      name: "Ayn Rand",
+    },
+    {
+      quote:
+        "A creative man is motivated by the desire to achieve, not by the desire to beat others.",
+      name: "Ayn Rand",
+    },
+    {
+      quote: "Expect problems and eat them for breakfast.",
+      name: "Alfred A. Montapert",
+    },
+    {
+      quote: "Start where you are. Use what you have. Do what you can.",
+      name: "Arthur Ashe",
+    },
+    {
+      quote:
+        "Ever tried. Ever failed. No matter. Try Again. Fail again. Fail better.",
+      name: "Samuel Beckett",
+    },
+    {
+      quote: "Be yourself; everyone else is already taken.",
+      name: "Oscar Wilde",
+    },
+    {
+      quote:
+        "Two things are infinite: the universe and human stupidity; and I'm not sure about the universe.",
+      name: "Albert Einstein",
+    },
+    {
+      quote:
+        "Always remember that you are absolutely unique. Just like everyone else.",
+      name: "Margaret Mead",
+    },
+    {
+      quote:
+        "Do not take life too seriously. You will never get out of it alive.",
+      name: "Elbert Hubbard",
+    },
+    {
+      quote:
+        "People who think they know everything are a great annoyance to those of us who do.",
+      name: "Isaac Asimov",
+    },
+    {
+      quote: "Procrastination is the art of keeping up with yesterday.",
+      name: "Don Marquis",
+    },
+    {
+      quote: "Get your facts first, then you can distort them as you please.",
+      name: "Mark Twain",
+    },
+    {
+      quote: "A day without sunshine is like, you know, night.",
+      name: "Steve Martin",
+    },
+    {
+      quote:
+        "My grandmother started walking five miles a day when she was sixty. She's ninety-seven now, and we don't know where the hell she is.",
+      name: "Ellen DeGeneres",
+    },
+    {
+      quote: "Don't sweat the petty things and don't pet the sweaty things.",
+      name: "George Carlin",
+    },
+    {
+      quote: "Always do whatever's next.",
+      name: "George Carlin",
+    },
+    {
+      quote: "Atheism is a non-prophet organization.",
+      name: "George Carlin",
+    },
+    {
+      quote:
+        "Hapiness is not something ready made. It comes from your own actions.",
+      name: "Dalai Lama",
+    },
+  ];
 
-  CanvasRenderingContext2D.prototype.drawBreakingText = function (
-    str,
-    x,
-    y,
-    w,
-    lh,
-    method
-  ) {
-    // local variables and defaults
-    var textSize = parseInt(this.font.replace(/\D/gi, ""));
-    var textParts = [];
-    var textPartsNo = 0;
-    var words = [];
-    var currLine = "";
-    var testLine = "";
-    str = str || "";
-    x = x || 0;
-    y = y || 0;
-    w = w || this.canvas.width;
-    lh = lh || 1;
-    method = method || "fill";
-
-    // manual linebreaks
-    textParts = str.split("\n");
-    textPartsNo = textParts.length;
-
-    // split the words of the parts
-    for (var i = 0; i < textParts.length; i++) {
-      words[i] = textParts[i].split(" ");
-    }
-
-    // now that we have extracted the words
-    // we reset the textParts
-    textParts = [];
-
-    // calculate recommended line breaks
-    // split between the words
-    for (i = 0; i < textPartsNo; i++) {
-      // clear the testline for the next manually broken line
-      currLine = "";
-
-      for (var j = 0; j < words[i].length; j++) {
-        testLine = currLine + words[i][j] + " ";
-
-        // check if the testLine is of good width
-        if (this.measureText(testLine).width > w && j > 0) {
-          textParts.push(currLine);
-          currLine = words[i][j] + " ";
-        } else {
-          currLine = testLine;
-        }
-      }
-      // replace is to remove trailing whitespace
-      textParts.push(currLine);
-    }
-
-    // render the text on the canvas
-    for (i = 0; i < textParts.length; i++) {
-      if (method === "fill") {
-        this.fillText(
-          textParts[i].replace(/((\s*\S+)*)\s*/, "$1"),
-          x,
-          y + textSize * lh * i
+  $("#quoteButton").click(function (evt) {
+    //define the containers of the info we target
+    var quote = $("#quoteContainer p").text();
+    var quoteGenius = $("#quoteGenius").text();
+    //prevent browser's default action
+    evt.preventDefault();
+    //getting a new random number to attach to a quote and setting a limit
+    var sourceLength = quoteSource.length;
+    var randomNumber = Math.floor(Math.random() * sourceLength);
+    //set a new quote
+    for (let i = 0; i <= sourceLength; i += 1) {
+      var newQuoteText = quoteSource[randomNumber].quote;
+      var newQuoteGenius = quoteSource[randomNumber].name;
+      //console.log(newQuoteText,newQuoteGenius);
+      var timeAnimation = 500;
+      var quoteContainer = $("#quoteContainer");
+      //fade out animation with callback
+      quoteContainer.fadeOut(timeAnimation, function () {
+        quoteContainer.html("");
+        quoteContainer.append(
+          "<p>" +
+            newQuoteText +
+            "</p>" +
+            '<p id="quoteGenius">' +
+            "-								" +
+            newQuoteGenius +
+            "</p>"
         );
-      } else if (method === "stroke") {
-        this.strokeText(
-          textParts[i].replace(/((\s*\S+)*)\s*/, "$1"),
-          x,
-          y + textSize * lh * i
-        );
-      } else if (method === "none") {
-        return {
-          textParts: textParts,
-          textHeight: textSize * lh * textParts.length,
-        };
-      } else {
-        console.warn("drawBreakingText: " + method + "Text() does not exist");
-        return false;
-      }
-    }
+        //fadein animation.
+        quoteContainer.fadeIn(timeAnimation);
+      });
 
-    return {
-      textParts: textParts,
-      textHeight: textSize * lh * textParts.length,
-    };
-  };
-})(window, document);
-
-var canvas = document.createElement("canvas");
-var canvasWrapper = document.getElementById("canvasWrapper");
-canvasWrapper.appendChild(canvas);
-canvas.width = 500;
-canvas.height = 500;
-var ctx = canvas.getContext("2d");
-var padding = 15;
-var textTop = "i don't always make a meme";
-var textBottom = "but when i do, i use ninivert's generator";
-var textSizeTop = 10;
-var textSizeBottom = 10;
-var image = document.createElement("img");
-
-image.onload = function (ev) {
-  // delete and recreate canvas do untaint it
-  canvas.outerHTML = "";
-  canvas = document.createElement("canvas");
-  canvasWrapper.appendChild(canvas);
-  ctx = canvas.getContext("2d");
-  document.getElementById("trueSize").click();
-  document.getElementById("trueSize").click();
-
-  draw();
-};
-
-document.getElementById("imgURL").oninput = function (ev) {
-  image.src = this.value;
-};
-
-document.getElementById("imgFile").onchange = function (ev) {
-  var reader = new FileReader();
-  reader.onload = function (ev) {
-    image.src = reader.result;
-  };
-  reader.readAsDataURL(this.files[0]);
-};
-
-document.getElementById("textTop").oninput = function (ev) {
-  textTop = this.value;
-  draw();
-};
-
-document.getElementById("textBottom").oninput = function (ev) {
-  textBottom = this.value;
-  draw();
-};
-
-document.getElementById("textSizeTop").oninput = function (ev) {
-  textSizeTop = parseInt(this.value);
-  draw();
-  document.getElementById("textSizeTopOut").innerHTML = this.value;
-};
-document.getElementById("textSizeBottom").oninput = function (ev) {
-  textSizeBottom = parseInt(this.value);
-  draw();
-  document.getElementById("textSizeBottomOut").innerHTML = this.value;
-};
-
-document.getElementById("trueSize").onchange = function (ev) {
-  if (document.getElementById("trueSize").checked) {
-    canvas.classList.remove("fullwidth");
-  } else {
-    canvas.classList.add("fullwidth");
-  }
-};
-
-document.getElementById("export").onclick = function () {
-  var img = canvas.toDataURL("image/png");
-  var link = document.createElement("a");
-  link.download = "My Meme";
-  link.href = img;
-  link.click();
-
-  var win = window.open("", "_blank");
-  win.document.write(
-    '<img style="box-shadow: 0 0 1em 0 dimgrey;" src="' + img + '"/>'
-  );
-  win.document.write(
-    '<h1 style="font-family: Helvetica; font-weight: 300">Right Click > Save As<h1>'
-  );
-  win.document.body.style.padding = "1em";
-};
-
-function style(font, size, align, base) {
-  ctx.font = size + "px " + font;
-  ctx.textAlign = align;
-  ctx.textBaseline = base;
-}
-
-function draw() {
-  // uppercase the text
-  var top = textTop.toUpperCase();
-  var bottom = textBottom.toUpperCase();
-
-  // set appropriate canvas size
-  canvas.width = image.width;
-  canvas.height = image.height;
-
-  // draw the image
-  ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
-
-  // styles
-  ctx.fillStyle = "#fff";
-  ctx.strokeStyle = "#000";
-  ctx.lineWidth = canvas.width * 0.004;
-
-  var _textSizeTop = (textSizeTop / 100) * canvas.width;
-  var _textSizeBottom = (textSizeBottom / 100) * canvas.width;
-
-  // draw top text
-  style("Impact", _textSizeTop, "center", "bottom");
-  ctx.drawBreakingText(
-    top,
-    canvas.width / 2,
-    _textSizeTop + padding,
-    null,
-    1,
-    "fill"
-  );
-  ctx.drawBreakingText(
-    top,
-    canvas.width / 2,
-    _textSizeTop + padding,
-    null,
-    1,
-    "stroke"
-  );
-
-  // draw bottom text
-  style("Impact", _textSizeBottom, "center", "top");
-  var height = ctx.drawBreakingText(bottom, 0, 0, null, 1, "none").textHeight;
-  console.log(ctx.drawBreakingText(bottom, 0, 0, null, 1, "none"));
-  ctx.drawBreakingText(
-    bottom,
-    canvas.width / 2,
-    canvas.height - padding - height,
-    null,
-    1,
-    "fill"
-  );
-  ctx.drawBreakingText(
-    bottom,
-    canvas.width / 2,
-    canvas.height - padding - height,
-    null,
-    1,
-    "stroke"
-  );
-}
-
-image.src =
-  "https://imgflip.com/s/meme/The-Most-Interesting-Man-In-The-World.jpg";
-document.getElementById("textSizeTop").value = textSizeTop;
-document.getElementById("textSizeBottom").value = textSizeBottom;
-document.getElementById("textSizeTopOut").innerHTML = textSizeTop;
-document.getElementById("textSizeBottomOut").innerHTML = textSizeBottom;
+      break;
+    } //end for loop
+  }); //end quoteButton function
+}); //end document ready
