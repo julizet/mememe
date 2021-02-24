@@ -1,2 +1,2 @@
 # mememe
-This is my very own meme generator called mememe
+This is a small app that generates some quotes on click
